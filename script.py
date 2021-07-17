@@ -114,3 +114,87 @@ predict_results = model.predict(normed_test_data)
 cm = confusion_matrix(predict_results, predict_results)
 sns.heatmap(cm, annot=True, ax=ax)
 plt.show()
+
+# -------------------------------------------------------------------------
+"""
+dt = pd.read_csv('glass.data')
+dt = dt.drop('ID', 1)
+
+print(dt['class'].describe())
+plt.figure(figsize=(9, 8))
+sns.distplot(dt['class'], color='g', bins=100, hist_kws={'alpha': 0.4})
+
+dt.hist(figsize=(16, 20), bins=50, xlabelsize=8, ylabelsize=8)
+
+df_num_corr = dt.corr()['class'][:-1]
+golden_features_list = df_num_corr[abs(df_num_corr) > 0.5].sort_values(ascending=False)
+print("There is {} strongly correlated values with Class:\n{}".format(len(golden_features_list), golden_features_list))
+
+for i in range(0, len(dt.columns), 5):
+    sns.pairplot(
+        data=dt,
+        x_vars=dt.columns[i:i+5],
+        y_vars=['class']
+    )
+
+corr = dt.drop('class', axis=1).corr() # We already examined class correlations
+plt.figure(figsize=(12, 10))
+sns.heatmap(
+    corr[(corr >= 0.5) | (corr <= -0.4)], 
+    cmap='viridis', vmax=1.0, vmin=-1.0, linewidths=0.1,
+    annot=True, annot_kws={"size": 8}, square=True
+)
+
+dt.describe(percentiles=[0.5])
+
+norm_min_max = lambda x: (x - np.min(x))/(np.max(x) - np.min(x))
+dt = dt.copy()
+dt.iloc[:,0:9] = dt.iloc[:,0:9].apply(norm_min_max, axis=0)
+dt.describe(percentiles=[0.5])
+
+# RepeatedStratifiedKFold
+
+y = dt['class']
+X = dt.drop('class', 1)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+rskf = RepeatedStratifiedKFold(n_splits=10, n_repeats=5)
+
+for train_index, test_index in rskf.split(X_train, y_train):
+  X_train_k, X_test_k = X_train.iloc[train_index], X_train.iloc[test_index]
+  y_train_k, y_test_k = y_train.iloc[train_index], y_train.iloc[test_index]
+
+  model_poly = svm.SVC(
+    C=1, # Termo de regularização
+    kernel='poly', # Kernels possíveis: linear, poly, rbf, sigmoid, precomputed
+  )
+  model_rbf = svm.SVC(
+    C=1, # Termo de regularização
+    kernel='rbf', # Kernels possíveis: linear, poly, rbf, sigmoid, precomputed
+  )
+  model_sigmoid = svm.SVC(
+    C=1, # Termo de regularização
+    kernel='sigmoid', # Kernels possíveis: linear, poly, rbf, sigmoid, precomputed
+  )
+  model_precomputed = svm.SVC(
+    C=1, # Termo de regularização
+    kernel='precomputed', # Kernels possíveis: linear, poly, rbf, sigmoid, precomputed
+  )
+
+  model_poly.fit(X_train_k, y_train_k)
+  model_rbf.fit(X_train_k, y_train_k)
+  model_sigmoid.fit(X_train_k, y_train_k)
+  model_precomputed.fit(X_train_k, y_train_k)
+
+  # Validação do modelo com base nos dados de t
+  poly_val = model_poly.score(X_test_k, y_test_k)
+  rbf_val = model_rbf.score(X_test_k, y_test_k)
+  sigmoid_val = model_sigmoid.score(X_test_k, y_test_k)
+  precomputed_val = model_precomputed.score(X_test_k, y_test_k)
+
+poly_test = model_poly.score(X_test, y_test)
+rbf_test = model_rbf.score(X_test, y_test)
+sigmoid_test = model_sigmoid.score(X_test, y_test)
+precomputed_test = model_precomputed.score(X_test, y_test)
+"""

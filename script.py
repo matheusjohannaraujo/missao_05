@@ -3,6 +3,7 @@
 
 https://scikit-learn.org/stable/modules/svm.html
 https://scikit-learn.org/stable/modules/multiclass.html
+https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RepeatedKFold.html
 https://archive.ics.uci.edu/ml/datasets/glass+identification
 
 """
@@ -19,7 +20,12 @@ dataset_df.columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']
 
 classes_sr = dataset_df['k']
 
-print(classes_sr)
+#print(classes_sr)
+
+k = []
+for i in range(1, 8):
+    k.append(dataset_df.loc[dataset_df['k'] == i])
+print(k)
 
 #scaler = preprocessing.StandardScaler().fit(classes_sr)
 

@@ -4,9 +4,9 @@ https://scikit-learn.org/stable/modules/multiclass.html
 https://scikit-learn.org/stable/modules/preprocessing.html
 https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RepeatedKFold.html
 https://archive.ics.uci.edu/ml/datasets/glass+identification
+https://www.youtube.com/watch?v=Zj1CoJk2feE
 """
 
-import numpy as np
 import pandas as pd
 from sklearn import svm
 from sklearn import preprocessing

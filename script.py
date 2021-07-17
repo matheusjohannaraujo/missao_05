@@ -3,6 +3,7 @@
 
 https://scikit-learn.org/stable/modules/svm.html
 https://scikit-learn.org/stable/modules/multiclass.html
+https://scikit-learn.org/stable/modules/preprocessing.html
 https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RepeatedKFold.html
 https://archive.ics.uci.edu/ml/datasets/glass+identification
 
@@ -11,6 +12,7 @@ https://archive.ics.uci.edu/ml/datasets/glass+identification
 import matplotlib
 import numpy as np
 import pandas as pd
+from sklearn import svm
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 import sklearn

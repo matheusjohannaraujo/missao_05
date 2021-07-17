@@ -29,7 +29,7 @@ dataset_df = dataset_df.dropna()
 print(f'dataset_df LxC = {dataset_df.shape}')
 
 # Embaralhando os dados
-dataset_df = dataset_df.sample(frac=1)
+#dataset_df = dataset_df.sample(frac=1)
 #print(dataset_df)
 
 # Separação dos conjuntos de dados
@@ -56,16 +56,25 @@ test_labels = test_dataset.pop('k')
 valid_labels = valid_dataset.pop('k')
 
 # Normalização dos dados
-#def norm(x):
-#   return (x - train_stats['mean']) / train_stats['std']
 norm = lambda x: (x - train_stats['mean']) / train_stats['std']
 normed_train_data = norm(train_dataset)
 normed_test_data = norm(test_dataset)
 normed_valid_data = norm(valid_dataset)
+#print(normed_train_data.head(10))
+#print(normed_test_data.head(10))
+#print(normed_valid_data.head(10))
 
-normed_train_data.head(10)
-
-
+# Treinando Modelo
+# Definindo o modo de funcionamento do modelo
+model = svm.SVC(
+    C=1, # Termo de regularização
+    kernel='linear', # Kernels possíveis: linear, poly, rbf, sigmoid, precomputed
+)
+# Inserindo os dados de treinamento no modelo
+model.fit(normed_train_data, train_labels)
+# Predição do modelo com base nos dados de test
+y_pred = model.predict(normed_test_data)
+print(y_pred)
 
 """
 classes_sr = dataset_df['k']

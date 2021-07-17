@@ -20,7 +20,7 @@ from sklearn.model_selection import RepeatedStratifiedKFold
 
 # Lendo dados
 dataset_df = pd.read_csv('glass.data')
-dataset_df.columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']
+dataset_df.columns = ['ID', 'RI', 'NA', 'MG', 'AL', 'SI', 'K', 'CA', 'BA', 'FE', 'class']
 
 # Número de linhas e colunas
 print(f'dataset_df shape: {dataset_df.shape}')
@@ -51,16 +51,16 @@ print(f'valid_dataset shape: {valid_dataset.shape}')
 # -------------------------------------------------------------------------
 # Gráfico de Relações
 train_stats = train_dataset.describe()
-train_stats.pop('k')
+train_stats.pop('class')
 sns.pairplot(train_stats[train_stats.columns], diag_kind='kde')
 plt.show()
 train_stats = train_stats.transpose()
 print(f'train_stats:\r\n {train_stats}')
 
 # Definindo Labels
-train_labels = train_dataset.pop('k')
-test_labels = test_dataset.pop('k')
-valid_labels = valid_dataset.pop('k')
+train_labels = train_dataset.pop('class')
+test_labels = test_dataset.pop('class')
+valid_labels = valid_dataset.pop('class')
 
 # -------------------------------------------------------------------------
 # Normalização dos dados
@@ -118,14 +118,13 @@ def smv_model_run_kernel(kernel, C=1):
     sns.heatmap(cm, annot=True, ax=ax)
     plt.show()
 
-smv_model_run_kernel('linear')
-smv_model_run_kernel('sigmoid')
 smv_model_run_kernel('poly')
 smv_model_run_kernel('rbf')
+smv_model_run_kernel('sigmoid')
+smv_model_run_kernel('linear')
 
 # -------------------------------------------------------------------------
-"""
-dt = pd.read_csv('glass.data')
+dt = dataset_df #pd.read_csv('glass.data')
 dt = dt.drop('ID', 1)
 
 print(dt['class'].describe())
@@ -187,7 +186,7 @@ for train_index, test_index in rskf.split(X_train, y_train):
   )
   model_precomputed = svm.SVC(
     C=1, # Termo de regularização
-    kernel='precomputed', # Kernels possíveis: linear, poly, rbf, sigmoid, precomputed
+    kernel='linear', # Kernels possíveis: linear, poly, rbf, sigmoid, precomputed
   )
 
   model_poly.fit(X_train_k, y_train_k)
@@ -205,4 +204,3 @@ poly_test = model_poly.score(X_test, y_test)
 rbf_test = model_rbf.score(X_test, y_test)
 sigmoid_test = model_sigmoid.score(X_test, y_test)
 precomputed_test = model_precomputed.score(X_test, y_test)
-"""
